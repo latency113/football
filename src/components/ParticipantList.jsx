@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";  // นำเข้า SweetAlert2
 
 const ParticipantList = ({ refresh }) => {
   const [participants, setParticipants] = useState([]);
@@ -25,12 +26,26 @@ const ParticipantList = ({ refresh }) => {
 
   const handleDelete = async (id) => {
     try {
-      // ส่งค่า createdBy ไปในการลบ
-      await axios.delete(`https://footballbackend-vqs7.onrender.com/delete/${id}`, {
+      // ส่งคำขอลบไปยัง API
+      const res = await axios.delete(`https://footballbackend-vqs7.onrender.com/delete/${id}`, {
         data: { createdBy }, // ส่ง createdBy ไป
       });
+
+      // ใช้ SweetAlert แสดงข้อความการลบสำเร็จ
+      Swal.fire({
+        icon: 'success',
+        title: 'ลบข้อมูลสำเร็จ!',
+        text: 'ข้อมูลของคุณถูกลบเรียบร้อยแล้ว',
+      });
+
       refresh(); // รีเฟรชข้อมูลหลังจากลบ
     } catch (error) {
+      // ใช้ SweetAlert แสดงข้อผิดพลาด
+      Swal.fire({
+        icon: 'error',
+        title: 'เกิดข้อผิดพลาด!',
+        text: 'ไม่สามารถลบข้อมูลได้',
+      });
       console.error("Error deleting participant:", error);
     }
   };
@@ -61,7 +76,7 @@ const ParticipantList = ({ refresh }) => {
                       onClick={() => handleDelete(p._id)}
                       className="text-red-500 hover:text-red-700"
                     >
-                      ลบ
+                      ยกเลิก
                     </button>
                   </td>
                 </tr>
