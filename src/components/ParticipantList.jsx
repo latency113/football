@@ -14,7 +14,7 @@ const ParticipantList = ({ refresh }) => {
       setParticipants(res.data);
     };
     fetchParticipants();
-  }, [refresh]);
+  },[]);
 
   // ดึงข้อมูล createdBy (IP address หรือข้อมูลอื่นๆ)
   useEffect(() => {
