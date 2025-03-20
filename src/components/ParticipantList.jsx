@@ -37,8 +37,6 @@ const ParticipantList = () => {
         title: "ลบข้อมูลสำเร็จ!",
         text: "ข้อมูลของคุณถูกลบเรียบร้อยแล้ว",
       });
-
-      refresh(); // รีเฟรชข้อมูลหลังจากลบ
     } catch (error) {
       // ใช้ SweetAlert แสดงข้อผิดพลาด
       Swal.fire({
