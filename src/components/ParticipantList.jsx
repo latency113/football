@@ -8,7 +8,7 @@ const ParticipantList = () => {
 
   useEffect(() => {
     const fetchParticipants = async () => {
-      const res = await axios.get("http://localhost:3000/participants");
+      const res = await axios.get("https://footballbackend-vqs7.onrender.com/participants");
       setParticipants(res.data);
     };
     fetchParticipants();
@@ -17,7 +17,7 @@ const ParticipantList = () => {
   // ดึงข้อมูล createdBy (IP address หรือข้อมูลอื่นๆ)
   useEffect(() => {
     const fetchCreatedBy = async () => {
-      const res = await axios.get("http://localhost:3000/getUserIP");
+      const res = await axios.get("https://footballbackend-vqs7.onrender.com/getUserIP");
       setCreatedBy(res.data.createdBy);
     };
     fetchCreatedBy();
@@ -27,7 +27,7 @@ const ParticipantList = () => {
     try {
       // ส่งคำขอลบไปยัง API
       const res = await axios.delete(
-        `http://localhost:3000/delete/${id}`,
+        `https://footballbackend-vqs7.onrender.com/delete/${id}`,
         { data: { createdBy } } // ส่ง createdBy ไป
       );
 
