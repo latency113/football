@@ -6,7 +6,7 @@ const ParticipantList = ({ refresh }) => {
 
   useEffect(() => {
     const fetchParticipants = async () => {
-      const res = await axios.get("http://localhost:3000/participants");
+      const res = await axios.get("https://footballbackend-vqs7.onrender.com/participants");
       setParticipants(res.data);
     };
     fetchParticipants();
