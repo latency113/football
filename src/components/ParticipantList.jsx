@@ -16,7 +16,6 @@ const ParticipantList = ({ refresh }) => {
   // ดึงข้อมูล createdBy (IP address หรือข้อมูลอื่นๆ)
   useEffect(() => {
     const fetchCreatedBy = async () => {
-      // ส่งคำขอไปยัง API เพื่อดึงค่า createdBy (สามารถดึง IP หรือข้อมูลอื่นๆ ตามที่ต้องการ)
       const res = await axios.get("https://footballbackend-vqs7.onrender.com/getUserIP");
       setCreatedBy(res.data.createdBy);
     };
@@ -57,12 +56,14 @@ const ParticipantList = ({ refresh }) => {
                 >
                   <td className="py-2 px-4">{p.name}</td>
                   <td className="py-2 px-4">
-                    <button
-                      onClick={() => handleDelete(p._id)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      ยกเลิก
-                    </button>
+                    {p.createdBy === createdBy && ( // ตรวจสอบว่า createdBy ตรงกันหรือไม่
+                      <button
+                        onClick={() => handleDelete(p._id)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        ยกเลิก
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))
