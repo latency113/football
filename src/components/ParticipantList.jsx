@@ -12,7 +12,7 @@ const ParticipantList = () => {
       setParticipants(res.data);
     };
     fetchParticipants();
-  }, []);
+  },[]);
 
   // ดึงข้อมูล createdBy (IP address หรือข้อมูลอื่นๆ)
   useEffect(() => {
@@ -37,6 +37,8 @@ const ParticipantList = () => {
         title: "ลบข้อมูลสำเร็จ!",
         text: "ข้อมูลของคุณถูกลบเรียบร้อยแล้ว",
       });
+
+      refresh(); // รีเฟรชข้อมูลหลังจากลบ
     } catch (error) {
       // ใช้ SweetAlert แสดงข้อผิดพลาด
       Swal.fire({
