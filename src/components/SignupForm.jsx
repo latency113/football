@@ -8,7 +8,7 @@ const SignupForm = ({ onSignup }) => {
     e.preventDefault();
     if (!name) return;
 
-    await axios.post("http://localhost:3000/signup", {
+    await axios.post("https://footballbackend-vqs7.onrender.com/signup", {
       name,
       activity: "Football",
     });
