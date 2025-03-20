@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Swal from "sweetalert2"; // นำเข้า SweetAlert2
+import Swal from "sweetalert2";
 
-const ParticipantList = ({ refresh }) => {
+const ParticipantList = () => {
   const [participants, setParticipants] = useState([]);
   const [createdBy, setCreatedBy] = useState(""); // สร้างสถานะ createdBy เพื่อเก็บ IP หรือข้อมูลอื่นๆ
 
   useEffect(() => {
     const fetchParticipants = async () => {
-      const res = await axios.get(
-        "https://footballbackend-vqs7.onrender.com/participants"
-      );
+      const res = await axios.get("http://localhost:3000/participants");
       setParticipants(res.data);
     };
     fetchParticipants();
@@ -19,10 +17,7 @@ const ParticipantList = ({ refresh }) => {
   // ดึงข้อมูล createdBy (IP address หรือข้อมูลอื่นๆ)
   useEffect(() => {
     const fetchCreatedBy = async () => {
-      // ส่งคำขอไปยัง API เพื่อดึงค่า createdBy (สามารถดึง IP หรือข้อมูลอื่นๆ ตามที่ต้องการ)
-      const res = await axios.get(
-        "https://footballbackend-vqs7.onrender.com/getUserIP"
-      );
+      const res = await axios.get("http://localhost:3000/getUserIP");
       setCreatedBy(res.data.createdBy);
     };
     fetchCreatedBy();
@@ -32,10 +27,8 @@ const ParticipantList = ({ refresh }) => {
     try {
       // ส่งคำขอลบไปยัง API
       const res = await axios.delete(
-        `https://footballbackend-vqs7.onrender.com/delete/${id}`,
-        {
-          data: { createdBy }, // ส่ง createdBy ไป
-        }
+        `http://localhost:3000/delete/${id}`,
+        { data: { createdBy } } // ส่ง createdBy ไป
       );
 
       // ใช้ SweetAlert แสดงข้อความการลบสำเร็จ
@@ -45,6 +38,7 @@ const ParticipantList = ({ refresh }) => {
         text: "ข้อมูลของคุณถูกลบเรียบร้อยแล้ว",
       });
 
+      refresh(); // รีเฟรชข้อมูลหลังจากลบ
     } catch (error) {
       // ใช้ SweetAlert แสดงข้อผิดพลาด
       Swal.fire({
@@ -72,13 +66,10 @@ const ParticipantList = ({ refresh }) => {
           <tbody>
             {participants.length > 0 ? (
               participants.map((p) => (
-                <tr
-                  key={p._id}
-                  className="border-b-2 border-gray-200 hover:bg-gray-50"
-                >
+                <tr key={p._id} className="border-b-2 border-gray-200 hover:bg-gray-50">
                   <td className="py-2 px-4">{p.name}</td>
                   <td className="py-2 px-4">
-                    {p.createdBy === createdBy && ( // ตรวจสอบว่า createdBy ตรงกันหรือไม่
+                    {p.createdBy === createdBy && (
                       <button
                         onClick={() => handleDelete(p._id)}
                         className="text-red-500 hover:text-red-700"
