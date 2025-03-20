@@ -1,17 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const SignupForm = ({ onSignup }) => {
   const [name, setName] = useState("");
+  const [ip, setIp] = useState("");
+
+  useEffect(() => {
+    const fetchIp = async () => {
+      try {
+        const response = await axios.get("https://api.ipify.org?format=json");
+        setIp(response.data.ip);
+      } catch (error) {
+        console.error("Error fetching IP address:", error);
+      }
+    };
+
+    fetchIp();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name) return;
 
-    await axios.post("http://localhost:3000/signup", {
+    await axios.post("https://footballbackend-vqs7.onrender.com/signup", {
       name,
       activity: "Football",
+      createdBy: ip,
     });
+
     setName("");
     onSignup();
   };

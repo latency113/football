@@ -3,40 +3,72 @@ import axios from "axios";
 
 const ParticipantList = ({ refresh }) => {
   const [participants, setParticipants] = useState([]);
+  const [createdBy, setCreatedBy] = useState(""); // สร้างสถานะ createdBy เพื่อเก็บ IP หรือข้อมูลอื่นๆ
 
   useEffect(() => {
     const fetchParticipants = async () => {
-      const res = await axios.get("http://localhost:3000/participants");
+      const res = await axios.get("https://footballbackend-vqs7.onrender.com/participants");
       setParticipants(res.data);
     };
     fetchParticipants();
   }, [refresh]);
+
+  // ดึงข้อมูล createdBy (IP address หรือข้อมูลอื่นๆ)
+  useEffect(() => {
+    const fetchCreatedBy = async () => {
+      // ส่งคำขอไปยัง API เพื่อดึงค่า createdBy (สามารถดึง IP หรือข้อมูลอื่นๆ ตามที่ต้องการ)
+      const res = await axios.get("https://footballbackend-vqs7.onrender.com/getUserIP");
+      setCreatedBy(res.data.createdBy);
+    };
+    fetchCreatedBy();
+  }, []);
+
+  const handleDelete = async (id) => {
+    try {
+      // ส่งค่า createdBy ไปในการลบ
+      await axios.delete(`https://footballbackend-vqs7.onrender.com/delete/${id}`, {
+        data: { createdBy }, // ส่ง createdBy ไป
+      });
+      refresh(); // รีเฟรชข้อมูลหลังจากลบ
+    } catch (error) {
+      console.error("Error deleting participant:", error);
+    }
+  };
 
   return (
     <div className="mt-5">
       <h3 className="bg-[#dff0d8] text-lg text-[#3c763d] mb-3 px-3 py-1 rounded-md">
         จำนวนคนที่ลงชื่อ: {participants.length} คน
       </h3>
-      <div className="overflow-hidden border-gray-200 bg-gray-100">
+      <div className="overflow-hidden border-gray-200 bg-gray-100 rounded-lg shadow-sm">
         <table className="w-full text-left text-gray-700">
           <thead className="bg-gray-50 text-gray-600 text-sm border-b-2 border-gray-200">
             <tr>
               <th className="py-2 px-4">ชื่อ</th>
+              <th className="py-2 px-4">การกระทำ</th>
             </tr>
           </thead>
           <tbody>
             {participants.length > 0 ? (
-              participants.map((p, index) => (
+              participants.map((p) => (
                 <tr
-                  key={index}
+                  key={p._id}
                   className="border-b-2 border-gray-200 hover:bg-gray-50"
                 >
                   <td className="py-2 px-4">{p.name}</td>
+                  <td className="py-2 px-4">
+                    <button
+                      onClick={() => handleDelete(p._id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      ลบ
+                    </button>
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="3" className="py-4 text-center text-gray-500">
+                <td colSpan="2" className="py-4 text-center text-gray-500">
                   ยังไม่มีใครลงชื่อ
                 </td>
               </tr>
