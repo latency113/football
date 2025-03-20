@@ -61,7 +61,7 @@ const ParticipantList = ({ refresh }) => {
                       onClick={() => handleDelete(p._id)}
                       className="text-red-500 hover:text-red-700"
                     >
-                      ลบ
+                      ยกเลิก
                     </button>
                   </td>
                 </tr>
