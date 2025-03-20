@@ -22,7 +22,7 @@ const SignupForm = ({ onSignup }) => {
     e.preventDefault();
     if (!name) return;
 
-    await axios.post("https://footballbackend-vqs7.onrender.com/signup", {
+    await axios.post("http://localhost:3000/signup", {
       name,
       activity: "Football",
       createdBy: ip,
