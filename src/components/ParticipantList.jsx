@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Swal from "sweetalert2";  // นำเข้า SweetAlert2
+import Swal from "sweetalert2"; // นำเข้า SweetAlert2
 
 const ParticipantList = ({ refresh }) => {
   const [participants, setParticipants] = useState([]);
@@ -8,7 +8,9 @@ const ParticipantList = ({ refresh }) => {
 
   useEffect(() => {
     const fetchParticipants = async () => {
-      const res = await axios.get("https://footballbackend-vqs7.onrender.com/participants");
+      const res = await axios.get(
+        "https://footballbackend-vqs7.onrender.com/participants"
+      );
       setParticipants(res.data);
     };
     fetchParticipants();
@@ -18,7 +20,9 @@ const ParticipantList = ({ refresh }) => {
   useEffect(() => {
     const fetchCreatedBy = async () => {
       // ส่งคำขอไปยัง API เพื่อดึงค่า createdBy (สามารถดึง IP หรือข้อมูลอื่นๆ ตามที่ต้องการ)
-      const res = await axios.get("https://footballbackend-vqs7.onrender.com/getUserIP");
+      const res = await axios.get(
+        "https://footballbackend-vqs7.onrender.com/getUserIP"
+      );
       setCreatedBy(res.data.createdBy);
     };
     fetchCreatedBy();
@@ -27,24 +31,27 @@ const ParticipantList = ({ refresh }) => {
   const handleDelete = async (id) => {
     try {
       // ส่งคำขอลบไปยัง API
-      const res = await axios.delete(`https://footballbackend-vqs7.onrender.com/delete/${id}`, {
-        data: { createdBy }, // ส่ง createdBy ไป
-      });
+      const res = await axios.delete(
+        `https://footballbackend-vqs7.onrender.com/delete/${id}`,
+        {
+          data: { createdBy }, // ส่ง createdBy ไป
+        }
+      );
 
       // ใช้ SweetAlert แสดงข้อความการลบสำเร็จ
       Swal.fire({
-        icon: 'success',
-        title: 'ลบข้อมูลสำเร็จ!',
-        text: 'ข้อมูลของคุณถูกลบเรียบร้อยแล้ว',
+        icon: "success",
+        title: "ลบข้อมูลสำเร็จ!",
+        text: "ข้อมูลของคุณถูกลบเรียบร้อยแล้ว",
       });
 
       refresh(); // รีเฟรชข้อมูลหลังจากลบ
     } catch (error) {
       // ใช้ SweetAlert แสดงข้อผิดพลาด
       Swal.fire({
-        icon: 'error',
-        title: 'เกิดข้อผิดพลาด!',
-        text: 'ไม่สามารถลบข้อมูลได้',
+        icon: "error",
+        title: "เกิดข้อผิดพลาด!",
+        text: "ไม่สามารถลบข้อมูลได้",
       });
       console.error("Error deleting participant:", error);
     }
@@ -72,12 +79,14 @@ const ParticipantList = ({ refresh }) => {
                 >
                   <td className="py-2 px-4">{p.name}</td>
                   <td className="py-2 px-4">
-                    <button
-                      onClick={() => handleDelete(p._id)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      ยกเลิก
-                    </button>
+                    {p.createdBy === createdBy && ( // ตรวจสอบว่า createdBy ตรงกันหรือไม่
+                      <button
+                        onClick={() => handleDelete(p._id)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        ยกเลิก
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))
